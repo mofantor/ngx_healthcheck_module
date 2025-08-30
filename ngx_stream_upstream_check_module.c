@@ -1509,7 +1509,11 @@ ngx_stream_upstream_check_status_update(ngx_upstream_check_peer_t *peer,
     ucscf = peer->conf;
 
     if (result) { //up
-        peer->shm->rise_count++;
+        if(peer->shm->rise_count < (ngx_uint_t)-1) {
+            peer->shm->rise_count++;
+        }else{
+            peer->shm->rise_count = ucscf->rise_count;
+        }
         peer->shm->fall_count = 0;
         if (peer->shm->down && peer->shm->rise_count >= ucscf->rise_count) {
             peer->shm->down = 0;
@@ -1520,7 +1524,11 @@ ngx_stream_upstream_check_status_update(ngx_upstream_check_peer_t *peer,
         }
     } else {
         peer->shm->rise_count = 0;
-        peer->shm->fall_count++;
+        if(peer->shm->fall_count < (ngx_uint_t)-1) {
+            peer->shm->fall_count++;
+        }else{
+            peer->shm->fall_count = ucscf->fall_count;
+        } 
         if (!peer->shm->down && peer->shm->fall_count >= ucscf->fall_count) {
             peer->shm->down = 1;
             ngx_log_error(NGX_LOG_NOTICE, ngx_cycle->log, 0, MODULE_NAME
