@@ -117,7 +117,7 @@ index 4df9777..eb2b366 100644
              if (peer->conns * best->weight != best->conns * peer->weight) {
                  continue;
 diff --git a/src/http/modules/ngx_http_upstream_random_module.c b/src/http/modules/ngx_http_upstream_random_module.c
-index 7471487..8ca6a64 100644
+index 7471487..9095888 100644
 --- a/src/http/modules/ngx_http_upstream_random_module.c
 +++ b/src/http/modules/ngx_http_upstream_random_module.c
 @@ -8,6 +8,9 @@
@@ -140,7 +140,7 @@ index 7471487..8ca6a64 100644
 +                peer->check_index);
 +
 +        if (ngx_http_upstream_check_peer_down(peer->check_index)) {
-+            continue;
++            goto next;
 +        }
 +#endif
          if (peer->max_fails
@@ -156,7 +156,7 @@ index 7471487..8ca6a64 100644
 +                "get random2 peer, check_index: %ui",
 +                peer->check_index);
 +        if (ngx_http_upstream_check_peer_down(peer->check_index)) {
-+            continue;
++            goto next;
 +        }
 +#endif
          if (peer->max_fails
@@ -401,7 +401,7 @@ index 6e83604..9f4c5ad 100644
                  continue;
              }
 diff --git a/src/stream/ngx_stream_upstream_random_module.c b/src/stream/ngx_stream_upstream_random_module.c
-index 71f76f8..385809c 100644
+index 71f76f8..1c48f6b 100644
 --- a/src/stream/ngx_stream_upstream_random_module.c
 +++ b/src/stream/ngx_stream_upstream_random_module.c
 @@ -8,6 +8,9 @@
@@ -424,7 +424,7 @@ index 71f76f8..385809c 100644
 +                "(stream_module)get random peer, check_index: %ui",
 +                peer->check_index);
 +        if (ngx_stream_upstream_check_peer_down(peer->check_index)) {
-+            continue;
++            goto next;
 +        }
 +#endif
          if (peer->max_fails
@@ -440,7 +440,7 @@ index 71f76f8..385809c 100644
 +                "(stream_module)get random2 peer, check_index: %ui",
 +                peer->check_index);
 +        if (ngx_stream_upstream_check_peer_down(peer->check_index)) {
-+            continue;
++            goto next;
 +        }
 +#endif
          if (peer->max_fails
