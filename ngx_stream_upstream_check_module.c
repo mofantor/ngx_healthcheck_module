@@ -784,23 +784,8 @@ ngx_stream_upstream_check_connect_handler(ngx_event_t *event)
             ngx_log_error(NGX_LOG_NOTICE, event->log, 0, MODULE_NAME
                    "[check-handler][when connect peer]"
                    "check peek failed, close connection");
-            /* 关闭连接时确保清理SSL资源 */
-            if (c->ssl) {
-                ngx_ssl_shutdown(c);
-            }
-            ngx_pool_t *pool = c->pool;
             ngx_close_connection(c);
             peer->pc.connection = NULL;
-            if (pool) {
-                ngx_destroy_pool(pool);
-            }
-            if (peer->check_data) {
-                ngx_stream_upstream_check_ctx_t *ctx = peer->check_data;
-                ctx->recv.start = NULL;
-                ctx->recv.pos = NULL;
-                ctx->recv.last = NULL;
-                ctx->recv.end = NULL;
-            }
         }
     }
     ngx_memzero(&peer->pc, sizeof(ngx_peer_connection_t));
@@ -1601,13 +1586,13 @@ ngx_stream_upstream_check_clean_event(ngx_upstream_check_peer_t *peer)
             if (pool) {
                 ngx_destroy_pool(pool);
             }
-            if (peer->check_data) {
-                ngx_stream_upstream_check_ctx_t *ctx = peer->check_data;
-                ctx->recv.start = NULL;
-                ctx->recv.pos = NULL;
-                ctx->recv.last = NULL;
-                ctx->recv.end = NULL;
-            }
+            // if (peer->check_data) {
+            //     ngx_stream_upstream_check_ctx_t *ctx = peer->check_data;
+            //     ctx->recv.start = NULL;
+            //     ctx->recv.pos = NULL;
+            //     ctx->recv.last = NULL;
+            //     ctx->recv.end = NULL;
+            // }
         }
     }
 
